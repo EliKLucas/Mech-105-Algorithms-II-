@@ -1,0 +1,89 @@
+% Numerical evaluation of integral by Simpson's 1/3 Rule
+% Inputs
+%   x = the vector of equally spaced independent variable
+%   y = the vector of function values with respect to x
+% Outputs:
+%   I = the numerical integral calculated
+function [I] = Simpson(x, y)
+trap = false;
+if (length(x) ~= length(y))
+    error('Matrices are not the same size');
+end
+for (count = 1:(length(x)-2))
+    if ((x(count+1)-x(count))~=(x(count+2)-x(count+1)))
+        error('X values are unequally spaced');
+    end
+end
+%Trap Rule
+numOfRectangles = (length(x)-1);
+if (rem(numOfRectangles,2) ~=0)
+    warning('trap rule is being used');
+    deltaX = x(length(x))-x(1);
+    numOfRectangles = (length(x)-1);
+    multiplyer = (deltaX/numOfRectangles)/2;
+    insideParentheses = 0;
+    for count = 1:length(x)
+        %edges
+        if (count==1||count==length(x))
+            insideParentheses = insideParentheses+y(count)
+        %interior values
+        else
+            insideParentheses = insideParentheses+(2*(y(count)));
+        end
+        %I = 'sum'
+        I = multiplyer*insideParentheses;
+    end
+    
+elseif (length(x)>3)
+    %Simpson's real case
+deltaX = (x(length(x)-1)-x(1));
+numOfRectangles = ((length(x)-1)-1);
+multiplyer = (deltaX/numOfRectangles)/3;
+
+insideParentheses = 0;
+for (count=1:(length(y)-1))
+    %edge cases
+    if (count==1||count==length(y-1))
+        insideParentheses = insideParentheses+y(count);
+        %odd case
+    elseif(mod(count,2)==1)
+        insideParentheses = insideParentheses+(2*y(count));
+        %even case
+    else
+        insideParentheses = insideParentheses+(4*y(count));
+    end
+end
+%I = 'sum'
+I=multiplyer*insideParentheses;
+trapArray = [y(length(y)-1), y(length(y))]
+trapArray(1) = (2*(trapArray(1)));
+deltaX = x(length(x))-x(length(x)-1);
+numOfRectangles = (1);
+multiplyer = (deltaX/numOfRectangles)/2;
+I = I+(multiplyer*(trapArray(1)+trapArray(2)));
+
+
+else
+%Simpson's
+deltaX = (x(length(x))-x(1));
+numOfRectangles = (length(x)-1);
+multiplyer = (deltaX/numOfRectangles)/3;
+
+insideParentheses = 0;
+for (count=1:length(y))
+    %edge cases
+    if (count==1||count==length(y))
+        insideParentheses = insideParentheses+y(count);
+        %odd case
+    elseif(mod(count,2)==1)
+        insideParentheses = insideParentheses+(2*y(count));
+        %even case
+    else
+        insideParentheses = insideParentheses+(4*y(count));
+    end
+end
+%I = 'sum'
+I=multiplyer*insideParentheses;
+
+end
+end
