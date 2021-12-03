@@ -1,0 +1,27 @@
+function [root, fx, ea, iter] = falsePosition(func, xl, xu, es, maxit, varargin)
+%falsePosition finds the root of a function using false position method
+
+err=+Inf; 
+iter=0; 
+maxit=200; 
+if (nargin<4)
+    maxit = 0.0001;
+    error;
+end
+if (func(xl)==0)
+    fx = xl
+else if (func(xu)==0)
+        fx = xu
+end
+    while(err>es && iter<maxit)
+        iter=iter+1; 
+        root=xu-func(xu)*((xu-xl)/(func(xu)-func(xl))); 
+        xl=xu;
+        xu=root;
+        err=abs(xu-xl); 
+        fx=func(xu);
+        ea=abs((xu-xl)/xu); 
+        real_solution1 = func(xl);
+        real_solution2 = func(xu);
+    end
+end
