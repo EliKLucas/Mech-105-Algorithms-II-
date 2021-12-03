@@ -67,9 +67,9 @@ iter - how many iterations were performed
 After calculating roots, the following values are printed in the terminal:
 
 - root
-- 
+
 - iter
-- 
+
 - ea
-- 
+
 - fx
