@@ -1,0 +1,70 @@
+function [L, U, P] = luFactor(A)
+
+% luFactor(A)
+%	LU decomposition with pivotiing
+% inputs:
+%	A = coefficient matrix
+% outputs:
+%	L = lower triangular matrix
+%	U = upper triangular matrix
+%       P = the permutation matrix
+U = A;
+disp(A)
+disp(U);
+[height,width]=size(A);
+disp(width);
+L = eye(width,height);
+P = eye(width,height);
+%[tblB,index] = sortrows(___)
+for (l=1:width)
+    for (j=1:height)
+        if (U(l,j)==0)
+            error
+        end
+    end
+end
+tempP = P
+
+for (l=1:height)
+    tempP(l,1) = U(l,1);
+end
+tempP = sortrows(tempP, 'descend')
+for (h=1:height)
+   if (sum(tempP(h,:))==tempP(h,1))
+       tempP(h,1)=1
+   else
+       tempP(h,1)=0
+   end
+end
+P = tempP
+U = sortrows(U, 'descend');%replace w function that swaps L when A is swapped, repeat after c==1
+
+%tempP = sortrows(tempP, 'descend')
+disp(tempP);
+%
+%c==1
+for count = 1:width
+if(count==1)
+    m = (U(2,1)/U(1,1)); %change 2 to height-1
+    L(2,1)=m;
+end
+U(2,count) = U(2,count)-(U(1,count)*m);
+end
+%c==2
+for count = 1:width
+    if (count==1)
+m = U(3,1)/U(1,1); %change 3 to height
+L(3,1)=m;
+    end
+U(3,count) = U(3,count)-(U(1,count)*m);
+end
+%c==3
+disp(U)
+for count = 2:width-1
+    if (count==2)
+m = U(height,2)/U(height-1,2);
+L(height,2)=m;
+    end
+U(3,count)= U(3,count)-(U(2,count)*m);
+end
+disp(U);
